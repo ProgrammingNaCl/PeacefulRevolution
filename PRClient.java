@@ -8,6 +8,7 @@ import java.net.Socket;
  * Created by diku on 10/28/15.
  */
 public class PRClient {
+    //see on chat, viskab ette exceptioni
     public PRClient() throws Exception{
         Socket socket = new Socket("localhost", 12900);
         System.out.println("Started client  socket at "

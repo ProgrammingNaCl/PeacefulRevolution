@@ -4,6 +4,8 @@ import java.util.LinkedList;
 /**
  * Created by muse on 27-Sep-15.
  */
+
+//saanud sellest eriti aru //TODO: kommentida ära
 public class PlayerData {
     static int cardInFocus =-1;
     String allegiance = "";

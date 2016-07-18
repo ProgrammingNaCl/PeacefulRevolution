@@ -10,6 +10,8 @@ import java.net.Socket;
  * Created by diku on 10/28/15.
  */
 public class PRServer {
+
+    //chati server, viskab veel ühe exceptioni ette
     public PRServer()
         throws Exception {
             ServerSocket serverSocket = new ServerSocket(12900, 100,
@@ -26,7 +28,7 @@ public class PRServer {
                 new Thread(runnable).start(); // start a new thread
             }
         }
-
+//töötleb chatikliendi asju
     public static void handleClientRequest(Socket socket) {
         try {
             BufferedReader socketReader = null;

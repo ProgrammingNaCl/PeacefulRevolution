@@ -22,9 +22,9 @@ public class PR {
         display(startUpScreen);
 
     }
-
+//viib kõik ekraanile välja
     public static void main(String[] args) {
-        //
+
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 5; y++) {
                 cityStreets[x][y] = new JPanel();
@@ -63,7 +63,7 @@ public class PR {
         new PR();
 
     }
-
+//näitab startupscreeni
     public void display(JPanel startUpScreen) {
 
         startUpScreen.setLayout(new GridLayout(5, 2));
@@ -88,14 +88,14 @@ public class PR {
 
 
     }
-
+//kooatab mängijate data
     private void createPlayerData(int nofPlayers) {
 
         for (int i = 0; i < nofPlayers; i++) {
             playerData.add(new PlayerData());
         }
     }
-
+//annab idetiteedi
     private LinkedList<String> identityRoller() {
         LinkedList<String> ids = new LinkedList<String>();
         ids.add("loyalist");
@@ -112,7 +112,7 @@ public class PR {
         Collections.shuffle(ids);
         return ids;
     }
-
+//valmistab GUI
     public void createGUI() {
         //main
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -147,7 +147,7 @@ public class PR {
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
-
+//kuulab ´OK´ vajutust
     public class OkListener implements ActionListener {
 
 

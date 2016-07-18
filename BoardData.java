@@ -4,6 +4,7 @@ import java.awt.*;
  * Created by muse on 27-Sep-15.
  */
 public class BoardData {
+    //näitab kaardi konsoolis
     public static int[][] cityMap = {
             {0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0},
@@ -11,6 +12,7 @@ public class BoardData {
             {0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0}
     };
+    //linnakaart konsoolis
     public static String[][] cityMapAsMappieces = {
             {"         ","         ","         ","         ","         "},
             {"         ","         ","         ","         ","         "},

@@ -133,18 +133,18 @@ public class GameData {
     };
 
 
-
+//näitab, kes praegu käib
     public static int getCurrentPlayer() {
 
         return currentPlayer;
     }
-
+//näitab, kelle käik on järgmine
     public static int nextPlayer(){
         if(currentPlayer < numberOfPlayers)currentPlayer++;
         else {currentPlayer = 0;}
         return getCurrentPlayer();
     }
-
+//teeb LinkedListi kaardipakist
     public GameData() {
         LinkedList<String> deck = new LinkedList<String>();
         deck = generateDeck();
@@ -155,7 +155,7 @@ public class GameData {
         }
         Collections.shuffle(supportBounty);
     }
-
+//teeb uue kaardipaki
     public static LinkedList<String> generateDeck() {
         LinkedList<String> d = new LinkedList<String>();
         for (String s : routeShape) {
@@ -168,12 +168,13 @@ public class GameData {
         Collections.shuffle(d);
         return d;
     }
-
+//annab kaardi kätte
     public static String drawCard(LinkedList<String> deck) {
         String topCard = deck.getFirst();
         deck.removeFirst();
         return topCard;
     }
+    //koostab mängijate nimekirja
     public static LinkedList<PlayerData> activistsList(LinkedList<PlayerData> p){
         LinkedList<PlayerData> activists = new LinkedList<PlayerData>();
         for (int i = 0; i < p.size(); i++) {
@@ -184,6 +185,7 @@ public class GameData {
 
         return activists;
     }
+    //sama
     public static LinkedList<PlayerData> loyaliststsList(LinkedList<PlayerData> p){
         LinkedList<PlayerData> loyalists = new LinkedList<PlayerData>();
         for (int i = 0; i < p.size(); i++) {

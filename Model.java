@@ -5,16 +5,18 @@ import java.util.LinkedList;
  * Created by diku on 10/16/15.
  */
 public class Model {
+
+    //vaatab järgi, kas tee ei katke
     public boolean routeFinder(int[][] cityMap) {
         boolean demonstrationPathSecured = false;
         return demonstrationPathSecured;
     }
-
+//vaatab järgi, kas on kaardiosad kõrval
     public boolean isAccepted(Point location, String mappiece) {
         getNearbyMappieces(location);
         return false;
     }
-
+// otsib üles kõrvalasuvad kaardiosad
     public String[] getNearbyMappieces(Point location) {
         String[] mappieces = {"", "", "", ""};
         int index = toIndex(location);
@@ -77,11 +79,11 @@ public class Model {
 
         return mappieces;
     }
-
+//viib üle punkti asukoha int'i
     private int toIndex(Point location) {
         return location.y * 9 + location.x;
     }
-
+// jagab raha
     public void distributeBounty() {
         //TODO this needs completion
         int nofPlayers = Main.nofPlayers;
@@ -117,6 +119,7 @@ public class Model {
         }
 
     }
+//vaatab järgi, kas tee on lõpetatud
 
     public boolean isCompletedRoute() {
         Maze m = new Maze(Main.map);
@@ -137,6 +140,7 @@ public class Model {
         public Maze(String[] map){
             generateMaze(map);
         }
+        //kirjutab numbreid konsooli välja
         public boolean solveMaze() {
             //Read the map
             //default empty map
@@ -171,7 +175,7 @@ public class Model {
             return b;
         }
 
-
+//lahendab ära tänavate labürindi
         public boolean recursiveSolve(int x, int y) {
             if (x == endX && y == endY) return true; // If you reached the end
 
@@ -204,7 +208,7 @@ public class Model {
                 return false;
             }else{return false;}
         }
-
+//teeb labürindi
         public int[][] generateMaze(String[] map) {
             int[][] cityAsMaze = new int[width][height];
             for (int x = 0; x < width; x++) {
@@ -235,7 +239,7 @@ public class Model {
             }
             return cityAsMaze;
         }
-
+//kirjutab üles punkti labürindi aadressile
         private Point toMazeAddress(int mapIndex, int indexOnMappiece) {
 
             Point ma = new Point();
@@ -243,22 +247,27 @@ public class Model {
             ma.x = ((mapIndex%9)*3) +(indexOnMappiece%3);
             return ma;
         }
+        //konverteerib indeksi punktiks
         private Point indexToPoint(int mapIndex){
             Point ma = new Point();
             ma.y = (mapIndex-(mapIndex%9))/9;
             ma.x = (mapIndex%9);
             return ma;
         }
+
+        //muudab punkti indeksiks
         private int pointToIndex(Point mapAddress){
             return mapAddress.x *9 + mapAddress.y;
         }
     }
+
     public static class Actions{
         //TODO: actions
         //violence and guards
         //corruption and reporters
         //injustice and lawyers
         //hints
+        //näitab "maja" kaarti
         public void getHint(boolean narking){
             if(narking){
 
