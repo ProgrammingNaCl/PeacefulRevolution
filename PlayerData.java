@@ -28,6 +28,8 @@ public class PlayerData {
     public PlayerData(){
         //setAllegiance();
         setName();
+        //TODO: setHand/ selectHandSize
+        //TODO: drawCard
     }
 
 

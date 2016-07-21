@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Collections;
 import java.util.LinkedList;
+//TODO: player card hands and player list
 
 
 
@@ -139,6 +140,7 @@ public class Main {
         //////////////////////
         for (int i = 0; i < nofRounds; i++) {
             deck = GameData.generateDeck();
+
             currentCard = GameData.drawCard(deck);
             presidentsLocation = 1 + 2 * (int) (Math.random() * 3);
             System.out.println("presidentsLocation :" + presidentsLocation);

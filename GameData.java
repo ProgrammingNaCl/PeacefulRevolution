@@ -19,6 +19,8 @@ public class GameData {
     static boolean routeExists = false;
     static LinkedList<String[]> gameHistory =  new LinkedList<>();
 
+    public static int handSize=6;
+
     static int currentPlayer = 0;
     //MAP bits
     static String mapPieceHIDDEN = "HHHHHHHHH";
@@ -33,7 +35,7 @@ public class GameData {
 
     static String mapPiece1Exit = "#»#  »#»#";
 
-    static String mapPieceNoExit = "# # » # #";
+    static String mapPieceNoExit= "# # # # #";
 
     static String mapPieceStart = "# #   # #";
 
@@ -155,7 +157,7 @@ public class GameData {
         }
         Collections.shuffle(supportBounty);
     }
-//teeb uue kaardipaki
+//teeb uue kaardipaki// kaardipakis 44+27 kaarti, 71 kaarti
     public static LinkedList<String> generateDeck() {
         LinkedList<String> d = new LinkedList<String>();
         for (String s : routeShape) {
@@ -173,6 +175,33 @@ public class GameData {
         String topCard = deck.getFirst();
         deck.removeFirst();
         return topCard;
+    }
+
+    public static int selectHandSize() {
+
+
+        switch (numberOfPlayers) {
+
+            case 3:handSize= 6;
+                break;
+            case 4:handSize=6;
+                break;
+            case 5:handSize=6;
+                break;
+            case 6:handSize=5;
+                break;
+            case 7:handSize=5;
+                break;
+            case 8:handSize=4;
+                break;
+            case 9:handSize=4;
+                break;
+            case 10:handSize=4;
+                break;
+            default:handSize=6;
+
+        }
+        return handSize;
     }
     //koostab mängijate nimekirja
     public static LinkedList<PlayerData> activistsList(LinkedList<PlayerData> p){

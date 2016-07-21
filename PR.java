@@ -62,6 +62,8 @@ public class PR {
         cityStreets[0][0].setVisible(true);
         new PR();
 
+
+
     }
 //näitab startupscreeni
     public void display(JPanel startUpScreen) {
