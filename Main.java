@@ -35,14 +35,14 @@ public class Main {
 
     static public int currentPlayer =0;
     static JPanel cardPanel = new JPanel();
-    static String currentCard;
+    static Card currentCard;
     static JPanel board = new JPanel(new GridLayout(5, 9));
     static JPanel data =new JPanel();
     static boolean clickable = true;
     static JButton endTurn;
-    static LinkedList<String> currentHand = new LinkedList<String>();
-    static LinkedList<String> deck = GameData.generateDeck();
-    static LinkedList<String> currentTechHand = new LinkedList<String>();
+    static LinkedList<Card> cards= Hand.cards;
+    static LinkedList<Card> deck = GameData.generateDeck();
+    static LinkedList<Card> currentTechHand = new LinkedList<Card>();
     static JButton infoCards;
     static int winnerID = -1;
     private final int nofRounds = 3;
@@ -153,13 +153,13 @@ public class Main {
                     (infoName).setText(p.name);
                     (infoALLEGIANCE).setText(p.allegiance);
                     (infoSupport).setText(p.supportGained + "");
-                    p.hand.add(currentCard);
+                    p.drawCardHand(deck);
 
                     if(currentPlayer<nofPlayers){currentPlayer++;}
                     else {currentPlayer = 0;}
                 }
                 //gameplay in multiplayer mode
-                //
+                //TODO:
             } while (isEndOfRound());
             gameMechanics.distributeBounty();
             //clear Board
@@ -343,15 +343,15 @@ public class Main {
             if (e.getSource() == endTurn) {
                 clickable = true;
                 currentCard = GameData.drawCard(deck);
-                if (currentCard.charAt(0) != '#') {
-                    currentTechHand.add(currentCard.substring(0, 1));
+                if (currentCard.data.charAt(0) != '#') {
+                    currentTechHand.add(currentCard);
                     infoCards.setText(currentTechHand.toString());
                 }
                 //new card
 
                 cardPanel.removeAll();
 
-                cardPanel.add(drawStreet(currentCard));
+                cardPanel.add(drawStreet(currentCard.data.substring(0,1)));
 
                 cardPanel.repaint();
                 mainFrame.pack();
@@ -398,9 +398,9 @@ public class Main {
         public void mouseClicked(MouseEvent e) {
             if (e.getSource() == cardPanel) {
 
-                currentCard = turnCard(currentCard);
+                currentCard.data = turnCard(currentCard.data);
                 cardPanel.remove(0);
-                cardPanel.add(drawStreet(currentCard));
+                cardPanel.add(drawStreet(currentCard.data));
                 cardPanel.repaint();
                 mainFrame.pack();
                 cardPanel.setVisible(true);
@@ -416,8 +416,8 @@ public class Main {
 
                     cardPanel.setVisible(false);
                     cityStreets[i].removeAll();
-                    cityStreets[i].add(drawStreet(currentCard));
-                    map[i] = currentCard;//add currentcard to map
+                    cityStreets[i].add(drawStreet(currentCard.data));
+                    map[i] = currentCard.data;//add currentcard to map
                     if (    i == 7 ||
                             i == 25||
                             i == 43||
@@ -656,10 +656,10 @@ public class Main {
     private static void createCardPanel(OkListener icl, JPanel playerScreenSouth) {
 
 
-        if (currentCard.charAt(0) == '#') {
-            cardPanel.add(drawStreet(currentCard));
+        if (currentCard.data.charAt(0) == '#') {
+            cardPanel.add(drawStreet(currentCard.data));
         } else {
-            players.get(0).techHand.add(currentCard.substring(0, 1));
+            players.get(0).techHand.add(currentCard.data.substring(0,1));
             infoCards.setText(players.get(0).techHand.toString());
         }
 

@@ -148,7 +148,7 @@ public class GameData {
     }
 //teeb LinkedListi kaardipakist
     public GameData() {
-        LinkedList<String> deck = new LinkedList<String>();
+        LinkedList <Card> deck;
         deck = generateDeck();
 
         for(int i =0;i < supportCard.length;i++)
@@ -158,26 +158,34 @@ public class GameData {
         Collections.shuffle(supportBounty);
     }
 //teeb uue kaardipaki// kaardipakis 44+27 kaarti, 71 kaarti
-    public static LinkedList<String> generateDeck() {
-        LinkedList<String> d = new LinkedList<String>();
+    public static LinkedList<Card> generateDeck() {
+        LinkedList<Card> d = new LinkedList<Card>();
         for (String s : routeShape) {
-            d.add(s);
+            Card card= new Card();
+            card.type= "Mappiece";
+            card.data=s;
+            d.add(card);
         }
         for (String t : techCards) {
-            d.add(t);
+            Card card= new Card();
+            card.type= "Action";
+            card.data=t;
+            d.add(card);
         }
 
         Collections.shuffle(d);
         return d;
     }
 //annab kaardi kätte
-    public static String drawCard(LinkedList<String> deck) {
-        String topCard = deck.getFirst();
+    public static Card drawCard(LinkedList<Card> deck) {
+        Card card= deck.getFirst();
         deck.removeFirst();
-        return topCard;
+        return card;
     }
 
-    public static int selectHandSize() {
+
+
+    public static int defineHandSize() {
 
 
         switch (numberOfPlayers) {
@@ -203,6 +211,16 @@ public class GameData {
         }
         return handSize;
     }
+
+    public static int getHandSize() {
+        int handSize= defineHandSize();
+
+        return handSize;
+    }
+
+
+
+
     //koostab mängijate nimekirja
     public static LinkedList<PlayerData> activistsList(LinkedList<PlayerData> p){
         LinkedList<PlayerData> activists = new LinkedList<PlayerData>();

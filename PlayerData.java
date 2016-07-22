@@ -31,6 +31,20 @@ public class PlayerData {
         //TODO: setHand/ selectHandSize
         //TODO: drawCard
     }
+    public static LinkedList<Card> drawCardHand(LinkedList <Card> cards){
+        LinkedList <Card> cardHand= new LinkedList<>();
+        int hs= GameData.getHandSize();
+        for (int i=0; i < hs; i++ ){
+            Card card= cards.getFirst();
 
+            cardHand.add(card);
+            cards.removeFirst();
+
+        }
+
+        return cardHand;
+
+
+    }
 
 }
