@@ -11,66 +11,71 @@ import java.util.LinkedList;
 //TODO: player card hands and player list
 
 
-
 public class Main {
 
     public static JPanel startUpScreen;
     static JTextField nameField = new JTextField();
     static JButton ok = new JButton("OK");
-
+    static JButton okToName = new JButton("OK");
+    static JLabel nameLabel = new JLabel();
     static LinkedList<String> identities;
     static JComboBox numberOfPlayers = new JComboBox();
     static int nofPlayers = 3;
     static LinkedList<PlayerData> players;
-    private static String name;
+    private static String currentPlayerName;
     public static String[] map = new String[45];
     public static int presidentsLocation;
     private static JLabel infoName;
     private static JLabel infoSupport;
     private static JLabel infoALLEGIANCE;
-    String[] playernames;
+    static String[] playernames;
     static JFrame mainFrame = new JFrame();
-    static JPanel[] cityStreets = new JPanel[9*5];
+    static JPanel[] cityStreets = new JPanel[9 * 5];
     static JLabel[][] street = new JLabel[3][3];
 
-    static public int currentPlayer =0;
+    static public int currentPlayer = 0;
     static JPanel cardPanel = new JPanel();
     static Card currentCard;
     static JPanel board = new JPanel(new GridLayout(5, 9));
-    static JPanel data =new JPanel();
+    static JPanel data = new JPanel();
     static boolean clickable = true;
     static JButton endTurn;
-    static LinkedList<Card> cards= Hand.cards;
+    static LinkedList<Card> cards = Hand.cards;
     static LinkedList<Card> deck = GameData.generateDeck();
     static LinkedList<Card> currentTechHand = new LinkedList<Card>();
     static JButton infoCards;
     static int winnerID = -1;
     private final int nofRounds = 3;
     final static int NAME = 1;
-    final static int SUPPORT =3;
+    final static int SUPPORT = 3;
     final static int ALLEGIANCE = 5;
+    static int countPlayerNames = 0;
     static Model modelOfGame = new Model();
+
     public static void main(String[] args) {
 
         new Main();
 
     }
-    /** joonistab tänava
-     *  @param s
-    */
-    private static JPanel drawStreet(String s) {
+
+    /**
+     * joonistab tänava
+     *
+     * @param c
+     */
+    private static JPanel drawStreet(Card c) {
         Color n;
         JLabel[][] street = new JLabel[3][3];
-
+        String s = c.data;
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 int stringIndex = x * 3 + y;
                 street[x][y] = new JLabel();
                 if (s.charAt(0) == '#') {//if it is a mappiece
                     if (s.charAt(stringIndex) == (' ')) n = Color.BLACK;
-                    else if (s.charAt(stringIndex) == ('H'))n = Color.gray;
-                    else if (s.charAt(stringIndex) == ('¤'))n =  Color.white;
-                    else if (s.charAt(stringIndex) == ('P'))n =  Color.yellow;
+                    else if (s.charAt(stringIndex) == ('H')) n = Color.gray;
+                    else if (s.charAt(stringIndex) == ('¤')) n = Color.white;
+                    else if (s.charAt(stringIndex) == ('P')) n = Color.yellow;
                     else {
                         n = Color.red;
                     }
@@ -94,15 +99,52 @@ public class Main {
         return givenStreet;
 
     }
-// annab 1 kaardi kätte
+    private static JPanel drawStreet(String s) {
+        Color n;
+        JLabel[][] street = new JLabel[3][3];
+
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
+                int stringIndex = x * 3 + y;
+                street[x][y] = new JLabel();
+                if (s.charAt(0) == '#') {//if it is a mappiece
+                    if (s.charAt(stringIndex) == (' ')) n = Color.BLACK;
+                    else if (s.charAt(stringIndex) == ('H')) n = Color.gray;
+                    else if (s.charAt(stringIndex) == ('¤')) n = Color.white;
+                    else if (s.charAt(stringIndex) == ('P')) n = Color.yellow;
+                    else {
+                        n = Color.red;
+                    }
+                    street[x][y].setOpaque(true);
+                    street[x][y].setBackground(n);
+                    street[x][y].setPreferredSize(new Dimension(35, 35));
+                }
+            }
+        }
+        JPanel givenStreet = new JPanel();
+        givenStreet.setLayout(new GridLayout(3, 3));
+        givenStreet.add(street[0][0]);
+        givenStreet.add(street[0][1]);
+        givenStreet.add(street[0][2]);
+        givenStreet.add(street[1][0]);
+        givenStreet.add(street[1][1]);
+        givenStreet.add(street[1][2]);
+        givenStreet.add(street[2][0]);
+        givenStreet.add(street[2][1]);
+        givenStreet.add(street[2][2]);
+        return givenStreet;
+
+    }
+    // annab 1 kaardi kätte
     private static int getRandomCard() {
         return (int) (Math.random() * GameData.routeShape.length);
     }
-// näitab alguse ekraani
+
+    // näitab alguse ekraani
     public void display(JPanel startUpScreen) {
 
         startUpScreen.setLayout(new GridLayout(5, 2));
-        JLabel name = new JLabel("Name : ");
+        nameLabel = new JLabel("Name : ");
 
         JLabel numberOfPlayersLabel = new JLabel("Players : ");
         String[] players = new String[]{"3", "4", "5", "6", "7", "8", "9", "10"};
@@ -113,10 +155,10 @@ public class Main {
         ok.addActionListener(okListener);
         mainFrame.setSize(800, 640);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        startUpScreen.add(name);
-        startUpScreen.add(nameField);
         startUpScreen.add(numberOfPlayersLabel);
         startUpScreen.add(numberOfPlayers);
+
+
         startUpScreen.add(ok);
         startUpScreen.setVisible(true);
         mainFrame.add(startUpScreen);
@@ -125,7 +167,8 @@ public class Main {
 
 
     }
-//konstruktor, stardib mängu
+
+    //konstruktor, stardib mängu
     public Main() {
         //initial
         clearMap();
@@ -148,15 +191,18 @@ public class Main {
 
             do {
                 //game play in single player mode
-                for (PlayerData p : players) {
-                    //
-                    (infoName).setText(p.name);
-                    (infoALLEGIANCE).setText(p.allegiance);
-                    (infoSupport).setText(p.supportGained + "");
-                    p.drawCardHand(deck);
+                for (int j = 0; j < players.size(); j++) {
 
-                    if(currentPlayer<nofPlayers){currentPlayer++;}
-                    else {currentPlayer = 0;}
+                    (infoName).setText(players.get(j).name);
+                    (infoALLEGIANCE).setText(players.get(j).allegiance);
+                    (infoSupport).setText(players.get(j).supportGained + "");
+                    players.get(j).drawCardHand(deck);
+
+                    if (currentPlayer < nofPlayers) {
+                        currentPlayer++;
+                    } else {
+                        currentPlayer = 0;
+                    }
                 }
                 //gameplay in multiplayer mode
                 //TODO:
@@ -186,36 +232,40 @@ public class Main {
     }
 
     //kirjeldab numbrid tähtedena
-    public enum DataTable{
+    public enum DataTable {
 
         NAME(1),
         ALLEGIANCE(5),
-        SUPPORT(3)
-        ;
+        SUPPORT(3);
         private int index;
+
         DataTable(int index) {
-             this.index = index;
+            this.index = index;
         }
-        public int geti(){
+
+        public int geti() {
             return index;
         }
 
     }
+
     //koristab kaardi puhtaks
     private void clearMap() {
         for (int i = 0; i < 45; i++) {
             map[i] = "";
         }
     }
-//kas on mängu lõpp
+
+    //kas on mängu lõpp
     private boolean isEndOfRound() {
         boolean endOfRound = false;
-        if(GameData.deckDepleted && isAllPlayersPass()){
+        if (GameData.deckDepleted && isAllPlayersPass()) {
             //loyalists win
             endOfRound = true;
             //revolutionaries win
 
-        }else{}
+        } else {
+        }
 
         return endOfRound;
     }
@@ -232,8 +282,7 @@ public class Main {
     }
 
 
-
-// teeb linkedlisti mängijatest
+    // teeb linkedlisti mängijatest
     private static LinkedList<PlayerData> createPlayerData(int nofPlayers) {
         //adds a copy of playerDAta to a list of players
         players = new LinkedList<PlayerData>();
@@ -241,10 +290,10 @@ public class Main {
             PlayerData n = new PlayerData();
             players.add(n);
         }
-        //name the players
-        players.get(0).name = name;
+        //currentPlayerName the players
+        players.get(0).name = currentPlayerName;
         for (int i = 0; i < GameData.numberOfPlayers; i++) {
-            players.get(i).name = "AIbot"+i;
+            players.get(i).name = "AIbot" + i;
         }
         //set allegiance
         LinkedList allegianceDeck = setAllegianceDeck();
@@ -258,15 +307,17 @@ public class Main {
         }
         return players;
     }
-// võtab linkedlisti mängijatest serverilt
-    private static LinkedList<PlayerData> getPlayerDataFromServer(){
+
+    // võtab linkedlisti mängijatest serverilt
+    private static LinkedList<PlayerData> getPlayerDataFromServer() {
         //check that the server exists
         //connect to server
         //get the data as a BufferedStream?/String
         //add all the data substrings to PlayerData LinkedList
         return null;
     }
-// teeb linkedlisti poolte kaardipakkidest
+
+    // teeb linkedlisti poolte kaardipakkidest
     private static LinkedList setAllegianceDeck() {
         LinkedList<String> allegianceDeck = new LinkedList();
         for (int i = 0; i < GameData.nofActivists[Main.nofPlayers]; i++) {
@@ -280,21 +331,40 @@ public class Main {
     }
 
 
-// reageerib "OK" vajutustele
+    // reageerib "OK" vajutustele
     public static class OkListener implements ActionListener {
 
 
-        private JFrame optionsFrame  = new JFrame();
+        private JFrame optionsFrame = new JFrame();
 
-// reaktsioon
+        // reaktsioon
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == ok) {
-
+                nameField.setText("");
+                //select nofplayerrs
                 nofPlayers = numberOfPlayers.getSelectedIndex() + 3;
                 GameData.numberOfPlayers = nofPlayers;
-                name = nameField.getText();
-                mainFrame.remove(startUpScreen);
-                createGUI();
+                startUpScreen.removeAll();
+                startUpScreen.add(nameLabel);
+                startUpScreen.add(nameField);
+                okToName.addActionListener(this);
+                startUpScreen.add(okToName);
+
+                startUpScreen.revalidate();
+                startUpScreen.repaint();
+                Main.playernames = new String[nofPlayers];
+            }
+            if (e.getSource() == okToName) {
+
+                if (countPlayerNames >= nofPlayers-1) {
+
+                    mainFrame.remove(startUpScreen);
+                    createGUI();
+                } else {
+                    Main.playernames[countPlayerNames] = nameField.getText();
+                    nameField.setText("");
+                    countPlayerNames++;
+                }
             }
             JButton command = null;
             if (e.getSource() == infoCards) {
@@ -332,45 +402,53 @@ public class Main {
                 //optionsFrame.dispose();
             }
 
-            }
         }
+    }
 
 
-// kuulab käigu lõppu
+    // kuulab käigu lõppu
     public static class EndListener implements MouseListener {
-//kuulab hiireklõpse
+        //kuulab hiireklõpse
         public void mouseClicked(MouseEvent e) {
+            String techCardList = "";
             if (e.getSource() == endTurn) {
                 clickable = true;
                 currentCard = GameData.drawCard(deck);
                 if (currentCard.data.charAt(0) != '#') {
                     currentTechHand.add(currentCard);
-                    infoCards.setText(currentTechHand.toString());
+                    for (int i = 0; i < currentTechHand.size(); i++) techCardList += currentTechHand.get(i).data;
+                    infoCards.setText(techCardList);
                 }
                 //new card
 
                 cardPanel.removeAll();
 
-                cardPanel.add(drawStreet(currentCard.data.substring(0,1)));
+                cardPanel.add(drawStreet(currentCard));
 
                 cardPanel.repaint();
                 mainFrame.pack();
                 cardPanel.setVisible(true);
             }
-            if(e.getSource() == cityStreets[8]){
-                if(presidentsLocation ==1 && Model.Actions.informerSpeaks){
+            if (e.getSource() == cityStreets[8]) {
+                if (presidentsLocation == 1 && Model.Actions.informerSpeaks) {
                     System.out.println("President is here!");
-                }else{System.out.println("President has escaped!");}
+                } else {
+                    System.out.println("President has escaped!");
+                }
             }
-            if(e.getSource() == cityStreets[17]){
-                if(presidentsLocation ==3 && Model.Actions.informerSpeaks){
+            if (e.getSource() == cityStreets[17]) {
+                if (presidentsLocation == 3 && Model.Actions.informerSpeaks) {
                     System.out.println("President is here!");
-                }else{System.out.println("President has escaped!");}
+                } else {
+                    System.out.println("President has escaped!");
+                }
             }
-            if(e.getSource() == cityStreets[44]){
-                if(presidentsLocation ==5 && Model.Actions.informerSpeaks){
+            if (e.getSource() == cityStreets[44]) {
+                if (presidentsLocation == 5 && Model.Actions.informerSpeaks) {
                     System.out.println("President is here!");
-                }else{System.out.println("President has escaped!");}
+                } else {
+                    System.out.println("President has escaped!");
+                }
             }
 
         }
@@ -400,7 +478,7 @@ public class Main {
 
                 currentCard.data = turnCard(currentCard.data);
                 cardPanel.remove(0);
-                cardPanel.add(drawStreet(currentCard.data));
+                cardPanel.add(drawStreet(currentCard));
                 cardPanel.repaint();
                 mainFrame.pack();
                 cardPanel.setVisible(true);
@@ -416,13 +494,13 @@ public class Main {
 
                     cardPanel.setVisible(false);
                     cityStreets[i].removeAll();
-                    cityStreets[i].add(drawStreet(currentCard.data));
+                    cityStreets[i].add(drawStreet(currentCard));
                     map[i] = currentCard.data;//add currentcard to map
-                    if (    i == 7 ||
-                            i == 25||
-                            i == 43||
-                            i == 16||
-                            i == 35)nearPalace(map);
+                    if (i == 7 ||
+                            i == 25 ||
+                            i == 43 ||
+                            i == 16 ||
+                            i == 35) nearPalace(map);
                     board.repaint();
                     mainFrame.pack();
                     cityStreets[i].setVisible(true);
@@ -454,39 +532,40 @@ public class Main {
 
         }
 
-        private Point indexToPoint(int mapIndex){
+        private Point indexToPoint(int mapIndex) {
             Point ma = new Point();
-            ma.y = (mapIndex-(mapIndex%9))/9;
-            ma.x = (mapIndex%9);
+            ma.y = (mapIndex - (mapIndex % 9)) / 9;
+            ma.x = (mapIndex % 9);
             return ma;
         }
+
         //TODO: parandada bug, saab kaarte panna "majade" juurde igal antud ajal
-        private boolean isNearMapPiece(int indexOfNewPiece){
+        private boolean isNearMapPiece(int indexOfNewPiece) {
             int x = (int) indexToPoint(indexOfNewPiece).getX();
             int y = (int) indexToPoint(indexOfNewPiece).getY();
 
             //one up
             //is there a location
-            if(y-1>=0) {
+            if (y - 1 >= 0) {
                 //is there a piece at the location
-                if(!map[indexOfNewPiece-9].equals(""))return true;
+                if (!map[indexOfNewPiece - 9].equals("")) return true;
             }
             //one right
             //is there a location
-            if(x+1 < 9) {
+            if (x + 1 < 9) {
                 //is there a piece at the location
-                if(!map[indexOfNewPiece+1].equals(""))return true;
+                if (!map[indexOfNewPiece + 1].equals("")) return true;
             }
             //one at bottom
             //is there a location
-            if(y+1<5) {
+            if (y + 1 < 5) {
                 //is there a piece at the location
-                if(!map[indexOfNewPiece+9].equals(""))return true;
+                if (!map[indexOfNewPiece + 9].equals("")) return true;
             }
 
 
             //one left
-            if(x-1 >=0) {
+            if (x - 1 >= 0) {
                 //is there a piece at the location
                 if (!map[indexOfNewPiece - 1].equals("")) return true;
             }
@@ -494,38 +573,40 @@ public class Main {
         }
 
 
+    }
 
-
-        }
-        //kas on majade juures//TODO:Saboteur win missing
-        private static void nearPalace(String[] map) {
-            int width = 27;
-            int height =15;
-            System.out.println("checking for possiblity of a win");
-            int[][] maze = new Model.Maze(map).generateMaze(map);
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    System.out.print(maze[x][y]);
-                }
-                System.out.println();
+    //kas on majade juures//TODO:Saboteur win missing
+    private static void nearPalace(String[] map) {
+        int width = 27;
+        int height = 15;
+        System.out.println("checking for possiblity of a win");
+        int[][] maze = new Model.Maze(map).generateMaze(map);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                System.out.print(maze[x][y]);
             }
-            if(isRouteComplete()){
-                System.out.println("Revolutionaries won!");
-            }else{
-                System.out.println("NOT YET COMPLETE");
-            }
-
-
+            System.out.println();
         }
-//vaatab, kas tee on valmis
-        private static boolean isRouteComplete() {
-                    return modelOfGame.isCompletedRoute();
+        if (isRouteComplete()) {
+            System.out.println("Revolutionaries won!");
+        } else {
+            System.out.println("NOT YET COMPLETE");
         }
-//puudub
-    public static void createCardPanel(){
+
 
     }
-//teeb GUI
+
+    //vaatab, kas tee on valmis
+    private static boolean isRouteComplete() {
+        return modelOfGame.isCompletedRoute();
+    }
+
+    //puudub
+    public static void createCardPanel() {
+
+    }
+
+    //teeb GUI
     public static void createGUI() {
         //main
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -552,7 +633,7 @@ public class Main {
 
 
             //add start
-            if (x == (9+9)-1+1) {
+            if (x == (9 + 9) - 1 + 1) {
                 JPanel street = drawStreet(GameData.mapPieceStart);
                 cityStreets[x].removeAll();
                 cityStreets[x].add(street);
@@ -560,34 +641,37 @@ public class Main {
             } else {
             }
             //last row AREA of PALACES
-            if (x == 9-1) {
-               JPanel street = drawStreet(GameData.mapPiecePalace);
+            if (x == 9 - 1) {
+                JPanel street = drawStreet(GameData.mapPiecePalace);
                 cityStreets[x].removeAll();
                 cityStreets[x].add(street);
                 cityStreets[x].addMouseListener(ml);
                 map[8] = GameData.mapPiecePalace;
-            }else{}
-            if (x == 3*9-1){
+            } else {
+            }
+            if (x == 3 * 9 - 1) {
                 JPanel street = drawStreet(GameData.mapPiecePalace);
                 cityStreets[x].removeAll();
                 cityStreets[x].add(street);
                 cityStreets[x].addMouseListener(ml);
                 map[26] = GameData.mapPiecePalace;
-            }else{}
-            if(x == 5*9 -1){
+            } else {
+            }
+            if (x == 5 * 9 - 1) {
                 JPanel street = drawStreet(GameData.mapPiecePalace);
                 cityStreets[x].removeAll();
                 cityStreets[x].add(street);
                 cityStreets[x].addMouseListener(ml);
                 map[44] = GameData.mapPiecePalace;
-            }else{}
+            } else {
+            }
 
             MListener el = new MListener();
             cityStreets[x].addMouseListener(el);
         }
 
         //ADD ALL CITYSTREETS TO THE BOARD
-        for (int x = 0; x < 9*5; x++) {
+        for (int x = 0; x < 9 * 5; x++) {
             JPanel street = cityStreets[x];
             board.add(street);
         }
@@ -599,7 +683,7 @@ public class Main {
         data.setLayout(new GridLayout(4, 2));
 
         JLabel labelName = new JLabel("NAME: ");
-        infoName = new JLabel(name);
+        infoName = new JLabel(currentPlayerName);
         data.add(labelName);
         data.add(infoName);
 
@@ -652,15 +736,19 @@ public class Main {
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
-//teeb kaartidepaneeli
+
+    //teeb kaartidepaneeli
     private static void createCardPanel(OkListener icl, JPanel playerScreenSouth) {
 
 
         if (currentCard.data.charAt(0) == '#') {
             cardPanel.add(drawStreet(currentCard.data));
         } else {
-            players.get(0).techHand.add(currentCard.data.substring(0,1));
-            infoCards.setText(players.get(0).techHand.toString());
+            players.get(0).techHand.add(currentCard.data.substring(0, 1));
+
+            //TODO: peab saama kõikide techkaartide andmed
+            // players.get(0).techHand.toString()
+            infoCards.setText("Hand");
         }
 
         MListener el = new MListener();
@@ -668,7 +756,7 @@ public class Main {
         playerScreenSouth.add(cardPanel);
     }
 
-//pöörab kaarti vajutusel
+    //pöörab kaarti vajutusel
     public static String turnCard(String card) {
         String twistedCard = "";
         twistedCard += card.substring(6, 7);
