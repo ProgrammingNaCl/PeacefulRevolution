@@ -65,6 +65,7 @@ public class Main {
      */
     private static JPanel drawStreet(Card c) {
         Color n;
+        
         JLabel[][] street = new JLabel[3][3];
         String s = c.data;
         for (int x = 0; x < 3; x++) {
