@@ -153,7 +153,7 @@ public class Main {
 
         OkListener okListener = new OkListener();
         ok.addActionListener(okListener);
-        mainFrame.setSize(800, 640);
+        mainFrame.setSize(800, 640+30);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         startUpScreen.add(numberOfPlayersLabel);
         startUpScreen.add(numberOfPlayers);
@@ -605,7 +605,13 @@ public class Main {
     public static void createCardPanel() {
 
     }
+public static void createHandPanel(){
 
+
+
+
+
+}
     //teeb GUI
     public static void createGUI() {
         //main
@@ -618,6 +624,9 @@ public class Main {
         for (int x = 0; x < 45; x++) {
             cityStreets[x] = new JPanel();
         }
+        JPanel handPanel= new JPanel();
+        handPanel.setPreferredSize(new Dimension(800, 35));
+
         //create the streets as a testjava
         //setup the streets
         EndListener ml = new EndListener();
@@ -627,7 +636,7 @@ public class Main {
             JPanel givenStreet = drawStreet(GameData.mapPieceHIDDEN);
             cityStreets[x].add(givenStreet);
         }
-
+        //
         for (int x = 0; x < 45; x++) {
             //first row
 
@@ -726,6 +735,10 @@ public class Main {
         mainPanel.add(playerScreenWest, BorderLayout.WEST);
         playerScreenSouth.setPreferredSize(new Dimension(70, 120));
         playerScreenSouth.add(data);
+        createHandPanel();
+        playerScreenSouth.add(handPanel);
+
+        handPanel.setVisible(true);
         //Current Card Panel
         createCardPanel(icl, playerScreenSouth);
         mainPanel.add(playerScreenSouth, BorderLayout.SOUTH);

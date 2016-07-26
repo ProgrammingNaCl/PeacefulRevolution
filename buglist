@@ -1,0 +1,18 @@
+katki on: tänavad //mitte "kokkukäivad" tänavad sobivad "kokku"
+AI ei tööta, ei liigu, ei vasta, ei mõtle
+"majade" juurest ei tule teid, ei ühendu
+mängu lõppedes saab käia
+nupud kaartide rotate´miseks ei tööta (fixed)
+käigud on randomilt antud
+kaarte saab viimasele reale panna ükskõik mis ajal
+peab tegema lojalistide võidu(võiduseisund puudub)
+
+UUS: kui "tänav" on nurgana koos "residentsiga", annab välja
+
+TODO:
+käe esitus, mängijate esitus
+käesoleva mängija vahetumine
+kaardi ärapanemine käest- seega endOfTurn automatiseerimine
+vaadata üle Main tsükkel,
+kuhu saab panna linnajuppe ja kuhu ei saa
+buglist üheks failiks projektis //done

@@ -140,6 +140,12 @@ public class GameData {
 
         return currentPlayer;
     }
+
+    public static LinkedList <Card> getDeck(){
+
+
+        return Main.deck;
+    }
 //näitab, kelle käik on järgmine
     public static int nextPlayer(){
         if(currentPlayer < numberOfPlayers)currentPlayer++;
