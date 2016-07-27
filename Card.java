@@ -7,7 +7,9 @@ public class Card {
     String name= "";
     String data= "";
 
-    String jpgFileName= "";
+    String pngFileName= "";
+    public Card(){
 
+    }
 
 }

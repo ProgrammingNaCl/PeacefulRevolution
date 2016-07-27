@@ -7,19 +7,19 @@ import java.util.LinkedList;
 public class GameData {
     final static String side[] = {"loyalist", "activist"};
 
-    final static int[] supportCardsForWinners = {3,4,5,6,7,8,9,9};
-    static String[] supportCard = {"1","1","1","1", "1","1","1","1", "1","1","1","1", "1","1","1","1", "2","2","2","2", "2","2","2","2", "3","3","3","3"};
+    final static int[] supportCardsForWinners = {3, 4, 5, 6, 7, 8, 9, 9};
+    static String[] supportCard = {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "2", "2", "2", "2", "2", "2", "2", "2", "3", "3", "3", "3"};
     static LinkedList<String> supportBounty = new LinkedList<String>();
 
-    final static int[] nofActivists = {3,4,4,5,5,6,7,7};
-    final static int[] nofLoyalists = {1,1,2,2,3,3,3,4};
+    final static int[] nofActivists = {3, 4, 4, 5, 5, 6, 7, 7};
+    final static int[] nofLoyalists = {1, 1, 2, 2, 3, 3, 3, 4};
     static int numberOfPlayers = 3;
     static boolean deckDepleted = false;
 
     static boolean routeExists = false;
-    static LinkedList<String[]> gameHistory =  new LinkedList<>();
+    static LinkedList<String[]> gameHistory = new LinkedList<>();
 
-    public static int handSize=6;
+    public static int handSize = 6;
 
     static int currentPlayer = 0;
     //MAP bits
@@ -35,7 +35,7 @@ public class GameData {
 
     static String mapPiece1Exit = "#»#  »#»#";
 
-    static String mapPieceNoExit= "# # # # #";
+    static String mapPieceNoExit = "# # # # #";
 
     static String mapPieceStart = "# #   # #";
 
@@ -100,8 +100,6 @@ public class GameData {
             mapPieceNoExit,
 
 
-
-
     };
 
     public static String[] techCards = {
@@ -123,9 +121,9 @@ public class GameData {
             "lawyer&reporter",
             "police&lawyer",
             //
-            "burnt house",
-            "burnt house",
-            "burnt house",
+            "roadblock",
+            "roadblock",
+            "roadblock",
             //hint
             "hint",
             "hint",
@@ -134,61 +132,92 @@ public class GameData {
 
     };
 
+    public static String[] pngFileNameLocations = {
+            //blockers
+            "Corruption.png",
 
-//näitab, kes praegu käib
+            "Violence.png",
+
+            "Ignorance.png",
+
+            //solutions
+            "Reporter.png",
+
+            "Police.png",
+
+            "Lawyer.png",
+
+
+            //roadblock
+            "Roadblock.png",
+
+            //hint
+            "GPS.png",
+
+    };
+
+    //näitab, kes praegu käib
     public static int getCurrentPlayer() {
 
         return currentPlayer;
     }
 
-    public static LinkedList <Card> getDeck(){
+    public static LinkedList<Card> getDeck() {
 
 
         return Main.deck;
     }
-//näitab, kelle käik on järgmine
-    public static int nextPlayer(){
-        if(currentPlayer < numberOfPlayers)currentPlayer++;
-        else {currentPlayer = 0;}
+
+    //näitab, kelle käik on järgmine
+    public static int nextPlayer() {
+        if (currentPlayer < numberOfPlayers) currentPlayer++;
+        else {
+            currentPlayer = 0;
+        }
         return getCurrentPlayer();
     }
-//teeb LinkedListi kaardipakist
+
+    //teeb LinkedListi kaardipakist
     public GameData() {
-        LinkedList <Card> deck;
+        LinkedList<Card> deck;
         deck = generateDeck();
 
-        for(int i =0;i < supportCard.length;i++)
-        {
+        for (int i = 0; i < supportCard.length; i++) {
             supportBounty.add(supportCard[i]);
         }
         Collections.shuffle(supportBounty);
     }
-//teeb uue kaardipaki// kaardipakis 44+27 kaarti, 71 kaarti
+
+    //teeb uue kaardipaki// kaardipakis 44+27 kaarti, 71 kaarti
     public static LinkedList<Card> generateDeck() {
         LinkedList<Card> d = new LinkedList<Card>();
         for (String s : routeShape) {
-            Card card= new Card();
-            card.type= "Mappiece";
-            card.data=s;
+            Card card = new Card();
+            card.type = "Mappiece";
+            card.data = s;
             d.add(card);
         }
         for (String t : techCards) {
-            Card card= new Card();
-            card.type= "Action";
-            card.data=t;
+            Card card = new Card();
+            card.type = "Action";
+            card.data = t;
             d.add(card);
         }
 
         Collections.shuffle(d);
         return d;
     }
-//annab kaardi kätte
+
+    //annab kaardi kätte
     public static Card drawCard(LinkedList<Card> deck) {
-        Card card= deck.getFirst();
-        deck.removeFirst();
+        Card card = new Card();
+        if (!deck.isEmpty()) {
+            card = deck.getFirst();
+            deck.removeFirst();
+        }
+
         return card;
     }
-
 
 
     public static int defineHandSize() {
@@ -196,53 +225,61 @@ public class GameData {
 
         switch (numberOfPlayers) {
 
-            case 3:handSize= 6;
+            case 3:
+                handSize = 6;
                 break;
-            case 4:handSize=6;
+            case 4:
+                handSize = 6;
                 break;
-            case 5:handSize=6;
+            case 5:
+                handSize = 6;
                 break;
-            case 6:handSize=5;
+            case 6:
+                handSize = 5;
                 break;
-            case 7:handSize=5;
+            case 7:
+                handSize = 5;
                 break;
-            case 8:handSize=4;
+            case 8:
+                handSize = 4;
                 break;
-            case 9:handSize=4;
+            case 9:
+                handSize = 4;
                 break;
-            case 10:handSize=4;
+            case 10:
+                handSize = 4;
                 break;
-            default:handSize=6;
+            default:
+                handSize = 6;
 
         }
         return handSize;
     }
 
     public static int getHandSize() {
-        int handSize= defineHandSize();
+        int handSize = defineHandSize();
 
         return handSize;
     }
 
 
-
-
     //koostab mängijate nimekirja
-    public static LinkedList<PlayerData> activistsList(LinkedList<PlayerData> p){
+    public static LinkedList<PlayerData> activistsList(LinkedList<PlayerData> p) {
         LinkedList<PlayerData> activists = new LinkedList<PlayerData>();
         for (int i = 0; i < p.size(); i++) {
-            if(p.get(i).allegiance.equals("activist")){
+            if (p.get(i).allegiance.equals("activist")) {
                 activists.add(p.get(i));
             }
         }
 
         return activists;
     }
+
     //sama
-    public static LinkedList<PlayerData> loyaliststsList(LinkedList<PlayerData> p){
+    public static LinkedList<PlayerData> loyaliststsList(LinkedList<PlayerData> p) {
         LinkedList<PlayerData> loyalists = new LinkedList<PlayerData>();
         for (int i = 0; i < p.size(); i++) {
-            if(p.get(i).allegiance.equals("loyalist")){
+            if (p.get(i).allegiance.equals("loyalist")) {
                 loyalists.add(p.get(i));
             }
         }

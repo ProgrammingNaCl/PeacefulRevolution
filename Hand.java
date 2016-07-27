@@ -4,14 +4,14 @@ import java.util.LinkedList;
  * Created by opilane on 21.07.2016.
  */
 public class Hand {
-    static LinkedList<Card> cards;
+    static LinkedList<Card> cards = new LinkedList<>();
 
 
     public Hand() {
         int handSize= GameData.defineHandSize();
-        LinkedList <Card> deck= GameData.getDeck();
+        Main.deck =  GameData.generateDeck();
+        LinkedList <Card> deck= Main.deck;
         for (int i = 0; i < handSize; i++) {
-            GameData.drawCard(deck);
             cards.add( GameData.drawCard(deck));
         }
 
@@ -22,5 +22,8 @@ public class Hand {
 
 
     }
+     public static Card getCard(){
 
+         return cards.getFirst();
+     }
 }

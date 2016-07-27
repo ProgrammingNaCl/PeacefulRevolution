@@ -32,6 +32,8 @@ public class Main {
     static JFrame mainFrame = new JFrame();
     static JPanel[] cityStreets = new JPanel[9 * 5];
     static JLabel[][] street = new JLabel[3][3];
+    static JPanel handPanel = new JPanel();
+    static Hand hand = new Hand();
 
     static public int currentPlayer = 0;
     static JPanel cardPanel = new JPanel();
@@ -99,6 +101,7 @@ public class Main {
         return givenStreet;
 
     }
+
     private static JPanel drawStreet(String s) {
         Color n;
         JLabel[][] street = new JLabel[3][3];
@@ -135,6 +138,7 @@ public class Main {
         return givenStreet;
 
     }
+
     // annab 1 kaardi kätte
     private static int getRandomCard() {
         return (int) (Math.random() * GameData.routeShape.length);
@@ -153,7 +157,7 @@ public class Main {
 
         OkListener okListener = new OkListener();
         ok.addActionListener(okListener);
-        mainFrame.setSize(800, 640+30);
+        mainFrame.setSize(800, 640 + 30);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         startUpScreen.add(numberOfPlayersLabel);
         startUpScreen.add(numberOfPlayers);
@@ -184,7 +188,7 @@ public class Main {
         for (int i = 0; i < nofRounds; i++) {
             deck = GameData.generateDeck();
 
-            currentCard = GameData.drawCard(deck);
+            currentCard = Hand.getCard();//peaks tulema hand ist   GameData.drawCard(deck);
             presidentsLocation = 1 + 2 * (int) (Math.random() * 3);
             System.out.println("presidentsLocation :" + presidentsLocation);
             Model gameMechanics = new Model();
@@ -356,7 +360,7 @@ public class Main {
             }
             if (e.getSource() == okToName) {
 
-                if (countPlayerNames >= nofPlayers-1) {
+                if (countPlayerNames >= nofPlayers - 1) {
 
                     mainFrame.remove(startUpScreen);
                     createGUI();
@@ -413,7 +417,7 @@ public class Main {
             String techCardList = "";
             if (e.getSource() == endTurn) {
                 clickable = true;
-                currentCard = GameData.drawCard(deck);
+                currentCard = Hand.getCard();
                 if (currentCard.data.charAt(0) != '#') {
                     currentTechHand.add(currentCard);
                     for (int i = 0; i < currentTechHand.size(); i++) techCardList += currentTechHand.get(i).data;
@@ -605,13 +609,41 @@ public class Main {
     public static void createCardPanel() {
 
     }
-public static void createHandPanel(){
+
+    public static void createHandPanel() {
+        int i = 0;
+        handPanel.setLayout(new FlowLayout());
+        handPanel.setPreferredSize(new Dimension(800, 35));
+        JPanel[] cardHandPanels = new JPanel[GameData.getHandSize()];
+        for (Card c : hand.cards) {
+            cardHandPanels[i] = new JPanel();
 
 
+            addCardToCardHandPanels(c, cardHandPanels[i]);
 
+            handPanel.add(cardHandPanels[i]);
+            i++;
+        }
 
+    }
 
-}
+    public static void addCardToCardHandPanels(Card c, JPanel handCard) {
+        if (c.data.substring(0, 1).equals("#")) {
+            handCard= drawStreet(c);
+
+        } else {
+            JLabel techCardsLabel= new JLabel();
+
+            ImageIcon iconLogo = new ImageIcon("Violence.png");
+            techCardsLabel.setIcon(iconLogo);
+
+            handCard.add(techCardsLabel);
+
+            mainFrame.revalidate();
+            mainFrame.repaint();
+        }
+    }
+
     //teeb GUI
     public static void createGUI() {
         //main
@@ -624,8 +656,8 @@ public static void createHandPanel(){
         for (int x = 0; x < 45; x++) {
             cityStreets[x] = new JPanel();
         }
-        JPanel handPanel= new JPanel();
-        handPanel.setPreferredSize(new Dimension(800, 35));
+
+
 
         //create the streets as a testjava
         //setup the streets
@@ -734,7 +766,9 @@ public static void createHandPanel(){
         mainPanel.add(playerScreenEast, BorderLayout.EAST);
         mainPanel.add(playerScreenWest, BorderLayout.WEST);
         playerScreenSouth.setPreferredSize(new Dimension(70, 120));
+
         playerScreenSouth.add(data);
+        playerScreenSouth.add(cardPanel);
         createHandPanel();
         playerScreenSouth.add(handPanel);
 
